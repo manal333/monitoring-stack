@@ -15,7 +15,7 @@ cAdvisor (container metrics) ──┘        │
 |---|---|---|
 | Prometheus | Scrapes and stores metrics, evaluates alert rules | 9090 |
 | Node Exporter | Host metrics (CPU, memory, disk, network) | 9100 |
-| cAdvisor | Per-container metrics | 8080 |
+| cAdvisor | Per-container metrics | 8082 |
 | Alertmanager | Groups and routes alerts | 9093 |
 | Grafana | Dashboards and visualization | 3000 |
 
