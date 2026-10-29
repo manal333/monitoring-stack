@@ -1,0 +1,22 @@
+route:
+  receiver: default
+  group_by: ["alertname", "instance"]
+  group_wait: 10s
+  group_interval: 1m
+  repeat_interval: 1h
+
+receivers:
+  # Alerts are visible in the Alertmanager UI (http://localhost:9093).
+  # To get notifications, uncomment ONE of the examples below and replace the placeholders.
+  - name: default
+    # slack_configs:
+    #   - api_url: "https://hooks.slack.com/services/XXX/YYY/ZZZ"
+    #     channel: "#alerts"
+    #     send_resolved: true
+    # email_configs:
+    #   - to: "you@example.com"
+    #     from: "alerts@example.com"
+    #     smarthost: "smtp.gmail.com:587"
+    #     auth_username: "you@example.com"
+    #     auth_password: "APP_PASSWORD"
+    #     send_resolved: true
