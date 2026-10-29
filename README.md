@@ -1,21 +1,19 @@
 # Monitoring Stack with Prometheus, Grafana & Alertmanager
 
-A ready-to-run monitoring stack deployed with Docker Compose. It collects host and container metrics (CPU, memory, disk, network), visualizes them in Grafana dashboards, and fires alerts through Alertmanager.
+A ready-to-run monitoring stack deployed with Docker Compose. It collects host metrics (CPU, memory, disk, network), visualizes them in Grafana dashboards, and fires alerts through Alertmanager.
 
 ## Architecture
 
 ```
 Node Exporter (host metrics) ──┐
                                ├──> Prometheus ──> Grafana (dashboards)
-cAdvisor (container metrics) ──┘        │
-                                        └──> Alertmanager (alerts)
+                                      └──> Alertmanager (alerts)
 ```
 
 | Service | Purpose | Port |
 |---|---|---|
 | Prometheus | Scrapes and stores metrics, evaluates alert rules | 9090 |
 | Node Exporter | Host metrics (CPU, memory, disk, network) | 9100 |
-| cAdvisor | Per-container metrics | 8082 |
 | Alertmanager | Groups and routes alerts | 9093 |
 | Grafana | Dashboards and visualization | 3000 |
 
@@ -40,7 +38,6 @@ The Prometheus data source is provisioned automatically.
 Import these community dashboards in Grafana (**Dashboards > New > Import**, enter the ID, choose the Prometheus data source):
 
 - **1860** - Node Exporter Full (host metrics)
-- **14282** - cAdvisor / Docker containers
 
 Exported dashboard JSON files live in `grafana/dashboards/` and are loaded automatically on startup.
 
@@ -54,8 +51,6 @@ Defined in `prometheus/alert.rules.yml`:
 | HighCPUUsage | Host CPU > 80% for 2 min | warning |
 | HighMemoryUsage | Host memory > 85% for 2 min | warning |
 | LowDiskSpace | Free disk < 15% for 2 min | warning |
-| ContainerHighCPU | Container CPU > 80% for 2 min | warning |
-| ContainerDown | Container not seen for 60 s | critical |
 
 Notifications (Slack / email) can be enabled in `alertmanager/alertmanager.yml`.
 
@@ -76,7 +71,6 @@ docker run --rm alpine sh -c "apk add --no-cache stress-ng && stress-ng --cpu 0 
 100 - (avg by (instance) (rate(node_cpu_seconds_total{mode="idle"}[2m])) * 100)   # CPU %
 (1 - node_memory_MemAvailable_bytes / node_memory_MemTotal_bytes) * 100            # Memory %
 rate(node_network_receive_bytes_total[2m])                                         # Network in
-sum by (name) (rate(container_cpu_usage_seconds_total{name!=""}[2m]))              # CPU per container
 ```
 
 ## Screenshots

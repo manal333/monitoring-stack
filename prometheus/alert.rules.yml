@@ -37,22 +37,4 @@ groups:
           summary: "Low disk space on {{ $labels.instance }} ({{ $labels.mountpoint }})"
           description: "Less than 15% disk space left (current: {{ $value | printf \"%.1f\" }}%)."
 
-  - name: container-alerts
-    rules:
-      - alert: ContainerHighCPU
-        expr: sum by (name) (rate(container_cpu_usage_seconds_total{name!=""}[2m])) * 100 > 80
-        for: 2m
-        labels:
-          severity: warning
-        annotations:
-          summary: "Container {{ $labels.name }} uses high CPU"
-          description: "Container CPU usage is above 80% of one core (current: {{ $value | printf \"%.1f\" }}%)."
-
-      - alert: ContainerDown
-        expr: time() - container_last_seen{name!=""} > 60
-        for: 1m
-        labels:
-          severity: critical
-        annotations:
-          summary: "Container {{ $labels.name }} is down"
-          description: "Container {{ $labels.name }} has not been seen for more than 60 seconds."
+  
